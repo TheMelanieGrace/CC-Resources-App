@@ -1,23 +1,21 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import { getShortestVulgateVerseForWords, extractWeekLatinWords } from './src/data/vulgateSentenceBank';
 import { LATIN_MEMORY_WORK } from './src/data/latinReviewData';
 import { findBibleAnswerByQuery } from './src/data/bibleData';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
 // Initialize the Google GenAI SDK
-const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+// On Netlify, AI Gateway injects GEMINI_API_KEY + GOOGLE_GEMINI_BASE_URL and the SDK
+// picks them up automatically. API_KEY is only a local-development fallback.
+const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
 let ai: GoogleGenAI | null = null;
-if (apiKey) {
+if (process.env.GEMINI_API_KEY) {
+  ai = new GoogleGenAI({});
+} else if (apiKey) {
   ai = new GoogleGenAI({ apiKey });
 } else {
   console.warn(
@@ -704,32 +702,3 @@ Respond ONLY with valid JSON. Do not include markdown formatting or backticks.`;
 
 // Export the app for serverless wrappers (Netlify Functions) without starting a listener.
 export { app };
-
-// Vite middleware in dev or static serving in production
-async function startServer() {
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  if (!isProduction) {
-    const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.resolve(__dirname, 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req, res) => {
-      res.sendFile(path.resolve(distPath, 'index.html'));
-    });
-  }
-
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT} in ${isProduction ? 'production' : 'development'} mode`);
-  });
-}
-
-// On Netlify the function wrapper imports `app`; never bind a port there.
-if (!process.env.NETLIFY) {
-  startServer();
-}
