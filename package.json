@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
+    "dev": "tsx dev-server.ts",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "tsx server.ts",
+    "start": "NODE_ENV=production tsx dev-server.ts",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },

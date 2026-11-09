@@ -7,11 +7,8 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# The AI helper's API routes run as a serverless function
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/api/:splat"
-  status = 200
+# The AI helper's API routes (/api/*) are served by netlify/functions/api.ts,
+# which declares its own path in its config export.
 
 # Single-page app: every other path serves the app shell
 [[redirects]]

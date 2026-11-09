@@ -16,7 +16,7 @@ Built by Melanie F. with Claude. Not affiliated with Classical Conversations.
 ## Run it locally
 ```
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3000 (runs dev-server.ts)
 ```
 
 ## Deploy on Netlify (one-time setup)
@@ -24,10 +24,7 @@ npm run dev        # http://localhost:3000
 2. In Netlify: **Add new site → Import an existing project → GitHub → CC-Resources-App**.
    Build settings are read automatically from `netlify.toml` (build `npm run build`,
    publish `dist`). Click **Deploy**.
-3. Optional, for the Ask AI helper: **Site configuration → Environment variables →
-   Add variable**: key `GEMINI_API_KEY`, value = your free key from
-   https://aistudio.google.com/apikey. Redeploy. Without the key, every worksheet
-   feature still works; only Ask AI answers with a friendly "not configured" notice.
+3. The AI features (Ask AI, AI sentence diagrams) use Netlify AI Gateway automatically; no API key is needed.
 
 After that, every update is: replace files on GitHub → Netlify redeploys itself.
 
