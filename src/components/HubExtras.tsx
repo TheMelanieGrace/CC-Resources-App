@@ -176,7 +176,7 @@ export const FoundationsExtras: React.FC<{ onSelectTool: SelectToolFn }> = ({ on
               Presidents & Vice Presidents Worksheets
             </h3>
             <p className="text-xs sm:text-sm text-[#5C6B62] leading-relaxed">
-              Verbatim memory work for all 47 U.S. Presidents and their Vice Presidents from 1. George Washington — John Adams to 47. Donald Trump — JD Vance. Supports full-width rows with VPs, columns by measured width in order, and range pickers for quick custom packets (e.g. Presidents 1–10).
+              Verbatim memory work for all 47 U.S. Presidents and their Vice Presidents from 1. George Washington — John Adams to 47. Donald Trump — JD Vance. Supports full-width rows with VPs, columns by measured width in order, and range pickers for quick custom packets (e.g. Presidents 1–20).
             </p>
             <div className="flex flex-wrap items-center gap-3 text-xs text-[#44514A] pt-1">
               <span className="flex items-center gap-1">
@@ -194,31 +194,8 @@ export const FoundationsExtras: React.FC<{ onSelectTool: SelectToolFn }> = ({ on
             </div>
           </div>
 
-          {/* Quick Generate Buttons */}
+          {/* Quick Generate Buttons: all 47 first, then groups of 20 (Melanie) */}
           <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
-            <button
-              onClick={() =>
-                onSelectTool('tracing', {
-                  category: 'Presidents & VPs',
-                  presidentsConfig: { mode: 'vps', start: 1, end: 10 },
-                })
-              }
-              className="px-4 py-2.5 bg-[#2F5D50] hover:bg-[#24493e] text-white text-xs sm:text-sm font-bold rounded-lg shadow-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <span>Presidents 1–10 with VPs</span>
-              <span>→</span>
-            </button>
-            <button
-              onClick={() =>
-                onSelectTool('tracing', {
-                  category: 'Presidents & VPs',
-                  presidentsConfig: { mode: 'order', start: 1, end: 10 },
-                })
-              }
-              className="px-4 py-2.5 bg-white hover:bg-[#E4EDE7] text-[#2E2B26] border border-[#D5DED8] text-xs sm:text-sm font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <span>Presidents 1–10 in Order</span>
-            </button>
             <button
               onClick={() =>
                 onSelectTool('tracing', {
@@ -226,9 +203,43 @@ export const FoundationsExtras: React.FC<{ onSelectTool: SelectToolFn }> = ({ on
                   presidentsConfig: { mode: 'vps', start: 1, end: 47 },
                 })
               }
-              className="px-4 py-2 bg-white hover:bg-[#E4EDE7] text-[#2E2B26] border border-[#D5DED8] text-xs sm:text-sm font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              className="px-4 py-2.5 bg-[#2F5D50] hover:bg-[#24493e] text-white text-xs sm:text-sm font-bold rounded-lg shadow-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <span>All 47 Presidents with VPs</span>
+              <span>→</span>
+            </button>
+            <button
+              onClick={() =>
+                onSelectTool('tracing', {
+                  category: 'Presidents & VPs',
+                  presidentsConfig: { mode: 'vps', start: 1, end: 20 },
+                })
+              }
+              className="px-4 py-2.5 bg-white hover:bg-[#E4EDE7] text-[#2E2B26] border border-[#D5DED8] text-xs sm:text-sm font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>Presidents 1–20</span>
+            </button>
+            <button
+              onClick={() =>
+                onSelectTool('tracing', {
+                  category: 'Presidents & VPs',
+                  presidentsConfig: { mode: 'vps', start: 21, end: 40 },
+                })
+              }
+              className="px-4 py-2.5 bg-white hover:bg-[#E4EDE7] text-[#2E2B26] border border-[#D5DED8] text-xs sm:text-sm font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>Presidents 21–40</span>
+            </button>
+            <button
+              onClick={() =>
+                onSelectTool('tracing', {
+                  category: 'Presidents & VPs',
+                  presidentsConfig: { mode: 'vps', start: 41, end: 47 },
+                })
+              }
+              className="px-4 py-2.5 bg-white hover:bg-[#E4EDE7] text-[#2E2B26] border border-[#D5DED8] text-xs sm:text-sm font-semibold rounded-lg shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>Presidents 41–47</span>
             </button>
           </div>
         </div>

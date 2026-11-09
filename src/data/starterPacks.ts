@@ -25,6 +25,7 @@ export type StarterCategory =
   | 'Cycle 3'
   | 'Bible'
   | 'Latin'
+  | 'English'
   | 'Science'
   | 'Essentials & IEW'
   | 'Civics'
@@ -40,6 +41,7 @@ export const STARTER_CATEGORIES: StarterCategory[] = [
   'Cycle 3',
   'Bible',
   'Latin',
+  'English',
   'Science',
   'Essentials & IEW',
   'Civics',
