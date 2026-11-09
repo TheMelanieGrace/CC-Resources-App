@@ -1,5 +1,5 @@
 import React from 'react';
-import { PenTool, Map, Calculator, GitFork, FileEdit, SpellCheck, Palette, BookType, HeartPulse, ArrowRight } from 'lucide-react';
+import { PenTool, Map, Calculator, GitFork, FileEdit, SpellCheck, Palette, BookType, HeartPulse, Landmark, ArrowRight } from 'lucide-react';
 import type { ActiveTool } from '../App';
 import type { StarterCategory } from '../data/starterPacks';
 import { FoundationsExtras, EssentialsExtras } from './HubExtras';
@@ -58,6 +58,9 @@ export const FoundationsHub: React.FC<HubProps> = ({ onSelectTool }) => (
       <Card icon={<Calculator className="w-5 h-5" />} title="Math Practice Builder"
         desc="Addition, subtraction, multiplication tables, long division with the classic bracket, rounding, and skip counting. Traditional algorithms only, with answer keys."
         cta="Build Math Sheets" onClick={() => onSelectTool('math')} />
+      <Card icon={<Landmark className="w-5 h-5" />} title="Latin Ending Charts"
+        desc="Fill-in practice charts for the Cycle 1 noun declensions and Cycle 2 first-conjugation tenses, with answer keys. Say the memory work, then write it."
+        cta="Open Latin Charts" onClick={() => onSelectTool('latincharts')} />
       <Card icon={<HeartPulse className="w-5 h-5" />} title="Body Systems"
         desc="Full-body anatomy pages: skeletal, muscular, nervous, lymphatic, digestive, and urinary systems, each with a labeled public-domain diagram and kid-level notes on what every part does."
         cta="Open Body Systems" onClick={() => onSelectTool('anatomy')} />

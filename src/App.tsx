@@ -11,9 +11,10 @@ import { SpellingTool } from './components/SpellingTool';
 import { FineArtsTool } from './components/FineArtsTool';
 import { VerbChartTool } from './components/VerbChartTool';
 import { AnatomyTool } from './components/AnatomyTool';
+import { LatinChartTool } from './components/LatinChartTool';
 import { StarterCategory } from './data/starterPacks';
 
-export type ActiveTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs' | 'anatomy';
+export type ActiveTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs' | 'anatomy' | 'latincharts';
 
 export default function App() {
   const [currentTool, setCurrentTool] = useState<ActiveTool>('home');
@@ -36,7 +37,7 @@ export default function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'foundations', 'essentials', 'tracing', 'diagram', 'geography', 'math', 'editor', 'spelling', 'finearts', 'verbs', 'anatomy'].includes(hash)) {
+      if (['home', 'foundations', 'essentials', 'tracing', 'diagram', 'geography', 'math', 'editor', 'spelling', 'finearts', 'verbs', 'anatomy', 'latincharts'].includes(hash)) {
         setCurrentTool(hash as ActiveTool);
       }
     };
@@ -98,6 +99,7 @@ export default function App() {
         {currentTool === 'spelling' && <SpellingTool onAddToWorksheet={handleAddToWorksheet} />}
         {currentTool === 'finearts' && <FineArtsTool />}
         {currentTool === 'anatomy' && <AnatomyTool />}
+        {currentTool === 'latincharts' && <LatinChartTool />}
         {currentTool === 'verbs' && <VerbChartTool />}
         {currentTool === 'tracing' && (
           <TracingTool
