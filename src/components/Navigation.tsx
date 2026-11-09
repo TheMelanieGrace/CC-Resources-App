@@ -21,7 +21,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-[#FFFFFF] border-b border-[#D5DED8] shadow-xs print:static print:bg-white print:border-b print:border-[#D5DED8] print:shadow-none print:py-2">
-      <div className="max-w-6xl mx-auto px-4 py-3 print:py-0 flex items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 print:py-0 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <div className="flex items-center gap-3">
           <div className="no-print">
             {currentTool !== 'home' ? (
@@ -47,11 +47,11 @@ export const Navigation: React.FC<NavigationProps> = ({
           <div>
             <h1
               onClick={() => onSelectTool('home')}
-              className="text-lg sm:text-xl font-bold tracking-tight text-[#2E2B26] cursor-pointer hover:text-[#2F5D50] transition-colors leading-tight"
+              className="whitespace-nowrap text-lg sm:text-xl font-bold tracking-tight text-[#2E2B26] cursor-pointer hover:text-[#2F5D50] transition-colors leading-tight"
             >
               CC Resources App
             </h1>
-            <p className="text-xs sm:text-sm text-[#5C6B62] font-medium leading-tight mt-0.5">
+            <p className="hidden sm:block text-xs sm:text-sm text-[#5C6B62] font-medium leading-tight mt-0.5 print:block">
               Custom Tools for Classical Homeschool Parents & Tutors
             </p>
           </div>
