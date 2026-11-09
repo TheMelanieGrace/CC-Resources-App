@@ -1,0 +1,20 @@
+# CC Resources App - Netlify configuration
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# The AI helper's API routes run as a serverless function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/api/:splat"
+  status = 200
+
+# Single-page app: every other path serves the app shell
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

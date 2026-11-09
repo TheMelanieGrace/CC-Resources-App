@@ -1,0 +1,8 @@
+{
+  "name": "CC Classroom Tools",
+  "description": "Custom Tools for Classical Homeschool Parents & Tutors: handwriting tracing worksheets, Reed-Kellogg sentence diagrams, and US geography study pages. Give your students more, every community day.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
