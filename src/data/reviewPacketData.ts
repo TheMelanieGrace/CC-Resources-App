@@ -1,7 +1,8 @@
 import { LATIN_MEMORY_WORK, LatinWeekData } from './latinReviewData';
 import { getScienceFunctionNotes } from './scienceFunctionsData';
 import { getEnglishHelpNotes } from './englishHelpData';
-import { CYCLE_1_WEEKS } from './cycle1SampleWeeks';
+import { CYCLE_1_WEEKS } from './cycle1Data';
+import { CYCLE_2_WEEKS } from './cycle2Data';
 import { STATE_METADATA } from './usGeographyData';
 import { WorksheetItem } from '../types';
 import { splitPromptAndAnswer } from '../utils/labelHelper';
@@ -159,178 +160,140 @@ export function getMathWeekData(
 ): { heading: string; lines: string[] } {
   const ans = (val: number | string) => (fillInTheBlank ? '__' : String(val));
 
+  // Weeks 1-6: two multiplication tables per week (1s-12s), weeks 7-9: 13s-15s,
+  // then squares, cubes, equivalents, formulas, and laws: matching the official
+  // Math Summary Proof Sheets week for week.
+  const table = (n: number): string[] => {
+    const lines: string[] = [];
+    for (let i = 1; i <= 15; i++) lines.push(`${n} x ${i} = ${ans(n * i)}`);
+    return lines;
+  };
+
+  if (week >= 1 && week <= 6) {
+    const a = week * 2 - 1;
+    const b = week * 2;
+    return {
+      heading: `${a}s and ${b}s Multiplication Tables (to 15)`,
+      lines: [...table(a), ...table(b)],
+    };
+  }
+  if (week >= 7 && week <= 9) {
+    const n = week + 6; // 13s, 14s, 15s
+    return { heading: `${n}s Multiplication Table (to 15)`, lines: table(n) };
+  }
+
   switch (week) {
-    case 1: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) {
-        lines.push(`1 x ${i} = ${ans(1 * i)}`);
-      }
-      return { heading: '1s Multiplication Table (to 15)', lines };
-    }
-    case 2: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`2 x ${i} = ${ans(2 * i)}`);
-      return { heading: '2s Multiplication Table (to 15)', lines };
-    }
-    case 3: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`3 x ${i} = ${ans(3 * i)}`);
-      return { heading: '3s Multiplication Table (to 15)', lines };
-    }
-    case 4: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`4 x ${i} = ${ans(4 * i)}`);
-      return { heading: '4s Multiplication Table (to 15)', lines };
-    }
-    case 5: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`5 x ${i} = ${ans(5 * i)}`);
-      return { heading: '5s Multiplication Table (to 15)', lines };
-    }
-    case 6: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`6 x ${i} = ${ans(6 * i)}`);
-      return { heading: '6s Multiplication Table (to 15)', lines };
-    }
-    case 7: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`7 x ${i} = ${ans(7 * i)}`);
-      return { heading: '7s Multiplication Table (to 15)', lines };
-    }
-    case 8: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`8 x ${i} = ${ans(8 * i)}`);
-      return { heading: '8s Multiplication Table (to 15)', lines };
-    }
-    case 9: {
-      const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) lines.push(`9 x ${i} = ${ans(9 * i)}`);
-      return { heading: '9s Multiplication Table (to 15)', lines };
-    }
     case 10: {
       const lines: string[] = [];
-      for (let i = 1; i <= 15; i++) {
-        lines.push(`${i} x ${i} = ${ans(i * i)}`);
-      }
+      for (let i = 1; i <= 15; i++) lines.push(`${i} x ${i} = ${ans(i * i)}`);
       return { heading: 'Squares (1 to 15 squared)', lines };
     }
     case 11: {
       const lines: string[] = [];
-      for (let i = 1; i <= 10; i++) {
-        lines.push(`${i}^3 = ${ans(i * i * i)}`);
-      }
-      return { heading: 'Cubes (1 to 10 cubed)', lines };
+      for (let i = 1; i <= 15; i++) lines.push(`${i} x ${i} x ${i} = ${ans((i * i * i).toLocaleString('en-US'))}`);
+      return { heading: 'Cubes (1 to 15 cubed)', lines };
     }
     case 12: {
       return {
-        heading: 'Liquid Equivalents',
+        heading: 'Teaspoons and Tablespoons',
         lines: [
-          `8 fluid ounces = ${ans('1 cup')}`,
-          `2 cups = ${ans('1 pint')}`,
-          `2 pints = ${ans('1 quart')}`,
-          `4 quarts = ${ans('1 gallon')}`,
+          `3 teaspoons equals ${ans('1 tablespoon')}`,
+          `2 tablespoons equals ${ans('1 fluid ounce')}`,
         ],
       };
     }
     case 13: {
       return {
-        heading: 'Linear Equivalents',
+        heading: 'Liquid Equivalents',
         lines: [
-          `12 inches = ${ans('1 foot')}`,
-          `3 feet = ${ans('1 yard')}`,
-          `5,280 feet = ${ans('1 mile')}`,
-          `1,760 yards = ${ans('1 mile')}`,
+          `8 fluid ounces equals ${ans('1 cup')}`,
+          `2 cups equals ${ans('1 pint')}`,
+          `2 pints equals ${ans('1 quart')}`,
+          `4 quarts equals ${ans('1 gallon')}`,
         ],
       };
     }
     case 14: {
       return {
-        heading: 'Area of a Rectangle',
+        heading: 'Linear Equivalents',
         lines: [
-          `The area of a rectangle = ${ans('length x width')}`,
-          `A = ${ans('l x w')}`,
+          `2.54 centimeters equals ${ans('1 inch')}`,
+          `12 inches equals ${ans('1 foot')}`,
+          `5,280 feet equals ${ans('1 mile')}`,
+          `1 kilometer equals ${ans('5/8 mile')}`,
         ],
       };
     }
     case 15: {
       return {
-        heading: 'Area of a Square',
+        heading: 'Metric Measurements',
         lines: [
-          `The area of a square = ${ans('side squared')}`,
-          `A = ${ans('s^2')}`,
+          `10 millimeters equals ${ans('1 centimeter')}`,
+          `100 centimeters equals ${ans('1 meter')}`,
+          `1,000 meters equals ${ans('1 kilometer')}`,
         ],
       };
     }
     case 16: {
       return {
-        heading: 'Area of a Triangle',
-        lines: [
-          `The area of a triangle = ${ans('1/2 base x height')}`,
-          `A = ${ans('1/2 b x h')}`,
-        ],
+        heading: 'Area of a Rectangle',
+        lines: [`The area of a rectangle equals ${ans('length times width')}.`],
       };
     }
     case 17: {
       return {
-        heading: 'Area of a Circle',
-        lines: [
-          `The area of a circle = ${ans('pi x radius squared')}`,
-          `A = ${ans('pi x r^2')}`,
-        ],
+        heading: 'Area of a Square',
+        lines: [`The area of a square equals ${ans('length of its side squared')}.`],
       };
     }
     case 18: {
       return {
-        heading: 'Circumference of a Circle',
-        lines: [
-          `The circumference of a circle = ${ans('2 x pi x radius')}`,
-          `C = ${ans('2 x pi x r')}`,
-        ],
+        heading: 'Area of a Triangle',
+        lines: [`The area of a triangle equals ${ans('one-half base times height')}.`],
       };
     }
     case 19: {
       return {
-        heading: 'Associative Law',
-        lines: [
-          `For Addition: (a + b) + c = ${ans('a + (b + c)')}`,
-          `For Multiplication: (a x b) x c = ${ans('a x (b x c)')}`,
-        ],
+        heading: 'Area of a Circle',
+        lines: [`The area of a circle equals ${ans('pi (3.14) times the radius squared')}.`],
       };
     }
     case 20: {
       return {
-        heading: 'Commutative Law',
-        lines: [
-          `For Addition: a + b = ${ans('b + a')}`,
-          `For Multiplication: a x b = ${ans('b x a')}`,
-        ],
+        heading: 'Circumference of a Circle',
+        lines: [`The circumference of a circle equals ${ans('2 times pi (3.14) times the radius')}.`],
       };
     }
     case 21: {
       return {
-        heading: 'Distributive Law',
-        lines: [`The distributive law states: a(b + c) = ${ans('ab + ac')}`],
+        heading: 'Associative Law',
+        lines: [
+          `The Associative Law for addition states: (a + b) + c = ${ans('a + (b + c)')}`,
+          `The Associative Law for multiplication states: (a x b) x c = ${ans('a x (b x c)')}`,
+        ],
       };
     }
     case 22: {
       return {
-        heading: 'Identity Law for Addition',
-        lines: [`The identity law for addition states: a + 0 = ${ans('a')}`],
+        heading: 'Commutative Law',
+        lines: [
+          `The Commutative Law for addition states: a + b = ${ans('b + a')}`,
+          `The Commutative Law for multiplication states: a x b = ${ans('b x a')}`,
+        ],
       };
     }
     case 23: {
       return {
-        heading: 'Identity Law for Multiplication',
-        lines: [`The identity law for multiplication states: a x 1 = ${ans('a')}`],
+        heading: 'Distributive Law',
+        lines: [`The Distributive Law states: a(b + c) = ${ans('ab + ac')}`],
       };
     }
     case 24: {
       return {
-        heading: 'Metric Equivalents',
+        heading: 'Identity Law',
         lines: [
-          `10 millimeters = ${ans('1 centimeter')}`,
-          `100 centimeters = ${ans('1 meter')}`,
-          `1,000 meters = ${ans('1 kilometer')}`,
+          `The Identity Law for addition states: a + 0 = ${ans('a')}`,
+          `The Identity Law for multiplication states: a x 1 = ${ans('a')}`,
         ],
       };
     }
@@ -344,228 +307,250 @@ export function getMathWeekData(
  */
 export const CYCLE_3_GEOGRAPHY_WEEKS: Record<
   number,
-  { heading: string; states: { state: string; capital: string }[] }
+  { heading: string; lines: string[] }
 > = {
   1: {
-    heading: 'Northern New England',
-    states: [
-      { state: 'Maine', capital: 'Augusta' },
-      { state: 'New Hampshire', capital: 'Concord' },
-      { state: 'Massachusetts', capital: 'Boston' },
-      { state: 'Rhode Island', capital: 'Providence' },
-      { state: 'Connecticut', capital: 'Hartford' },
+    heading: 'Week 1: States and Capitals',
+    lines: [
+      'Maine - Augusta',
+      'New Hampshire - Concord',
+      'Massachusetts - Boston',
+      'Rhode Island - Providence',
+      'Connecticut - Hartford',
     ],
   },
   2: {
-    heading: 'Mid-Atlantic',
-    states: [
-      { state: 'New York', capital: 'Albany' },
-      { state: 'New Jersey', capital: 'Trenton' },
-      { state: 'Pennsylvania', capital: 'Harrisburg' },
-      { state: 'Delaware', capital: 'Dover' },
-      { state: 'Maryland', capital: 'Annapolis' },
+    heading: 'Week 2: States and Capitals',
+    lines: [
+      'Vermont - Montpelier',
+      'New York - Albany',
+      'New Jersey - Trenton',
+      'Pennsylvania - Harrisburg',
+      'Delaware - Dover',
     ],
   },
   3: {
-    heading: 'Upper South & Atlantic Coast',
-    states: [
-      { state: 'Virginia', capital: 'Richmond' },
-      { state: 'West Virginia', capital: 'Charleston' },
-      { state: 'North Carolina', capital: 'Raleigh' },
-      { state: 'South Carolina', capital: 'Columbia' },
-      { state: 'Georgia', capital: 'Atlanta' },
+    heading: 'Week 3: States and Capitals',
+    lines: [
+      'Maryland - Annapolis',
+      'Virginia - Richmond',
+      'West Virginia - Charleston',
+      'North Carolina - Raleigh',
+      'South Carolina - Columbia',
+      'Washington, DC',
     ],
   },
   4: {
-    heading: 'Deep South & Gulf Coast',
-    states: [
-      { state: 'Florida', capital: 'Tallahassee' },
-      { state: 'Alabama', capital: 'Montgomery' },
-      { state: 'Mississippi', capital: 'Jackson' },
-      { state: 'Louisiana', capital: 'Baton Rouge' },
+    heading: 'Week 4: States and Capitals',
+    lines: [
+      'Georgia - Atlanta',
+      'Florida - Tallahassee',
+      'Alabama - Montgomery',
+      'Mississippi - Jackson',
+      'Louisiana - Baton Rouge',
     ],
   },
   5: {
-    heading: 'Eastern Midwest & Central',
-    states: [
-      { state: 'Michigan', capital: 'Lansing' },
-      { state: 'Ohio', capital: 'Columbus' },
-      { state: 'Indiana', capital: 'Indianapolis' },
-      { state: 'Kentucky', capital: 'Frankfort' },
-      { state: 'Tennessee', capital: 'Nashville' },
+    heading: 'Week 5: States and Capitals',
+    lines: [
+      'Michigan - Lansing',
+      'Ohio - Columbus',
+      'Indiana - Indianapolis',
+      'Kentucky - Frankfort',
+      'Tennessee - Nashville',
     ],
   },
   6: {
-    heading: 'Western Midwest & Ozarks',
-    states: [
-      { state: 'Wisconsin', capital: 'Madison' },
-      { state: 'Illinois', capital: 'Springfield' },
-      { state: 'Iowa', capital: 'Des Moines' },
-      { state: 'Missouri', capital: 'Jefferson City' },
-      { state: 'Arkansas', capital: 'Little Rock' },
+    heading: 'Week 6: States and Capitals',
+    lines: [
+      'Wisconsin - Madison',
+      'Illinois - Springfield',
+      'Iowa - Des Moines',
+      'Missouri - Jefferson City',
+      'Arkansas - Little Rock',
     ],
   },
   7: {
-    heading: 'Northern Plains',
-    states: [
-      { state: 'Minnesota', capital: 'Saint Paul' },
-      { state: 'North Dakota', capital: 'Bismarck' },
-      { state: 'South Dakota', capital: 'Pierre' },
-      { state: 'Nebraska', capital: 'Lincoln' },
-      { state: 'Kansas', capital: 'Topeka' },
+    heading: 'Week 7: States and Capitals',
+    lines: [
+      'Minnesota - St. Paul',
+      'North Dakota - Bismarck',
+      'South Dakota - Pierre',
+      'Wyoming - Cheyenne',
+      'Nebraska - Lincoln',
     ],
   },
   8: {
-    heading: 'South Central & Texas',
-    states: [
-      { state: 'Oklahoma', capital: 'Oklahoma City' },
-      { state: 'Texas', capital: 'Austin' },
+    heading: 'Week 8: States and Capitals',
+    lines: [
+      'Kansas - Topeka',
+      'Oklahoma - Oklahoma City',
+      'Texas - Austin',
+      'Colorado - Denver',
+      'New Mexico - Santa Fe',
     ],
   },
   9: {
-    heading: 'Northern Rockies & Pacific Northwest',
-    states: [
-      { state: 'Colorado', capital: 'Denver' },
-      { state: 'Wyoming', capital: 'Cheyenne' },
-      { state: 'Montana', capital: 'Helena' },
-      { state: 'Idaho', capital: 'Boise' },
-      { state: 'Washington', capital: 'Olympia' },
+    heading: 'Week 9: States and Capitals',
+    lines: [
+      'Utah - Salt Lake City',
+      'Arizona - Phoenix',
+      'Nevada - Carson City',
+      'California - Sacramento',
+      'Hawaii - Honolulu',
     ],
   },
   10: {
-    heading: 'Southwest & Great Basin',
-    states: [
-      { state: 'Oregon', capital: 'Salem' },
-      { state: 'California', capital: 'Sacramento' },
-      { state: 'Nevada', capital: 'Carson City' },
-      { state: 'Utah', capital: 'Salt Lake City' },
-      { state: 'Arizona', capital: 'Phoenix' },
-      { state: 'New Mexico', capital: 'Santa Fe' },
+    heading: 'Week 10: States and Capitals',
+    lines: [
+      'Montana - Helena',
+      'Idaho - Boise',
+      'Washington - Olympia',
+      'Oregon - Salem',
+      'Alaska - Juneau',
     ],
   },
   11: {
-    heading: 'Non-Contiguous States',
-    states: [
-      { state: 'Alaska', capital: 'Juneau' },
-      { state: 'Hawaii', capital: 'Honolulu' },
+    heading: 'Week 11: Northern Appalachian Mountains',
+    lines: [
+      'White Mountains',
+      'Green Mountains',
+      'Adirondack Mountains',
+      'Allegheny Mountains',
     ],
   },
   12: {
-    heading: 'Review: Northern States & Capitals',
-    states: [
-      { state: 'Maine', capital: 'Augusta' },
-      { state: 'Vermont', capital: 'Montpelier' },
-      { state: 'New Hampshire', capital: 'Concord' },
-      { state: 'Massachusetts', capital: 'Boston' },
-      { state: 'New York', capital: 'Albany' },
+    heading: 'Week 12: Southern Appalachian Mountains',
+    lines: [
+      'The Great Valley',
+      'Blue Ridge Mountains',
+      'Great Smoky Mountains',
+      'Cumberland Mountains',
+      'Mt. Mitchell',
     ],
   },
   13: {
-    heading: 'Review: Mid-Atlantic States & Capitals',
-    states: [
-      { state: 'Pennsylvania', capital: 'Harrisburg' },
-      { state: 'Maryland', capital: 'Annapolis' },
-      { state: 'Virginia', capital: 'Richmond' },
-      { state: 'North Carolina', capital: 'Raleigh' },
+    heading: 'Week 13: Western Mountains',
+    lines: [
+      'Rocky Mountains',
+      'Pikes Peak',
+      'Mt. Elbert',
+      'Sierra Nevada',
+      'Mt. Whitney',
     ],
   },
   14: {
-    heading: 'Review: Southern States & Capitals',
-    states: [
-      { state: 'South Carolina', capital: 'Columbia' },
-      { state: 'Georgia', capital: 'Atlanta' },
-      { state: 'Florida', capital: 'Tallahassee' },
-      { state: 'Alabama', capital: 'Montgomery' },
+    heading: 'Week 14: Northwest Mountains',
+    lines: [
+      'Cascade Mountains',
+      'Mt. Rainier',
+      'Mt. St. Helens',
+      'Denali',
     ],
   },
   15: {
-    heading: 'Review: Gulf & Delta States & Capitals',
-    states: [
-      { state: 'Mississippi', capital: 'Jackson' },
-      { state: 'Louisiana', capital: 'Baton Rouge' },
-      { state: 'Arkansas', capital: 'Little Rock' },
-      { state: 'Tennessee', capital: 'Nashville' },
+    heading: 'Week 15: Great Lakes',
+    lines: [
+      'Huron',
+      'Ontario',
+      'Michigan',
+      'Erie',
+      'Superior',
     ],
   },
   16: {
-    heading: 'Review: Great Lakes States & Capitals',
-    states: [
-      { state: 'Ohio', capital: 'Columbus' },
-      { state: 'Michigan', capital: 'Lansing' },
-      { state: 'Indiana', capital: 'Indianapolis' },
-      { state: 'Illinois', capital: 'Springfield' },
-      { state: 'Wisconsin', capital: 'Madison' },
+    heading: 'Week 16: Bays',
+    lines: [
+      'Chesapeake Bay',
+      'Hudson Bay',
+      'San Francisco Bay',
+      'Puget Sound',
+      'Pamlico Sound',
     ],
   },
   17: {
-    heading: 'Review: Central Plains States & Capitals',
-    states: [
-      { state: 'Iowa', capital: 'Des Moines' },
-      { state: 'Missouri', capital: 'Jefferson City' },
-      { state: 'Kansas', capital: 'Topeka' },
-      { state: 'Nebraska', capital: 'Lincoln' },
+    heading: 'Week 17: Rivers (East)',
+    lines: [
+      'St. Lawrence River',
+      'Ohio River',
+      'Mississippi River',
+      'Missouri River',
+      'Arkansas River',
     ],
   },
   18: {
-    heading: 'Review: Northern Plains States & Capitals',
-    states: [
-      { state: 'Minnesota', capital: 'Saint Paul' },
-      { state: 'North Dakota', capital: 'Bismarck' },
-      { state: 'South Dakota', capital: 'Pierre' },
-      { state: 'Wyoming', capital: 'Cheyenne' },
+    heading: 'Week 18: Rivers (West)',
+    lines: [
+      'Colorado River',
+      'Red River',
+      'Rio Grande River',
+      'Columbia River',
+      'Great Salt Lake',
     ],
   },
   19: {
-    heading: 'Review: Mountain States & Capitals',
-    states: [
-      { state: 'Colorado', capital: 'Denver' },
-      { state: 'Utah', capital: 'Salt Lake City' },
-      { state: 'Montana', capital: 'Helena' },
-      { state: 'Idaho', capital: 'Boise' },
+    heading: 'Week 19: Trails',
+    lines: [
+      'Cumberland Road',
+      'Santa Fe Trail',
+      'Mormon Trail',
+      'Gila Trail',
+      'Old Spanish Trail',
+      'California Trail',
+      'Oregon Trail',
     ],
   },
   20: {
-    heading: 'Review: Southwest States & Capitals',
-    states: [
-      { state: 'Texas', capital: 'Austin' },
-      { state: 'Oklahoma', capital: 'Oklahoma City' },
-      { state: 'New Mexico', capital: 'Santa Fe' },
-      { state: 'Arizona', capital: 'Phoenix' },
+    heading: 'Week 20: Canals',
+    lines: [
+      'Erie Canal',
+      'Pennsylvania Canal',
+      'Chesapeake and Ohio Canal',
+      'Ohio and Erie Canal',
+      'Miami and Erie Canal',
     ],
   },
   21: {
-    heading: 'Review: Pacific Northwest States & Capitals',
-    states: [
-      { state: 'Washington', capital: 'Olympia' },
-      { state: 'Oregon', capital: 'Salem' },
-      { state: 'Nevada', capital: 'Carson City' },
-      { state: 'California', capital: 'Sacramento' },
+    heading: 'Week 21: Native American Regions',
+    lines: [
+      'Eastern Woodlands',
+      'Plains',
+      'Plateau',
+      'Northwest Coast',
+      'California',
+      'Great Basin',
+      'Southwest',
     ],
   },
   22: {
-    heading: 'Review: Pacific Coast & Islands',
-    states: [
-      { state: 'California', capital: 'Sacramento' },
-      { state: 'Hawaii', capital: 'Honolulu' },
-      { state: 'Alaska', capital: 'Juneau' },
+    heading: 'Week 22: Deserts',
+    lines: [
+      'Mojave Desert',
+      'Sonoran Desert',
+      'Colorado Desert',
+      'Painted Desert',
+      'Great Salt Lake Desert',
     ],
   },
   23: {
-    heading: 'Review: Eastern Seaboard Highlights',
-    states: [
-      { state: 'Delaware', capital: 'Dover' },
-      { state: 'Rhode Island', capital: 'Providence' },
-      { state: 'Connecticut', capital: 'Hartford' },
-      { state: 'New Jersey', capital: 'Trenton' },
+    heading: 'Week 23: Prominent Features',
+    lines: [
+      'Grand Canyon',
+      'Black Hills',
+      'Ozark Highlands',
+      'Okefenokee Swamp',
+      'Olympic Rain Forests',
+      'Niagara Falls',
     ],
   },
   24: {
-    heading: 'Review: United States Capitals Capstone',
-    states: [
-      { state: 'Washington, D.C.', capital: 'Nation Capital' },
-      { state: 'Virginia', capital: 'Richmond' },
-      { state: 'Maryland', capital: 'Annapolis' },
-      { state: 'Pennsylvania', capital: 'Harrisburg' },
+    heading: 'Week 24: More Prominent Features',
+    lines: [
+      'Mississippi River Delta',
+      'Mammoth Cave',
+      'San Andreas Fault',
+      'Gulf of Mexico',
+      'Death Valley',
     ],
   },
 };
@@ -579,7 +564,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
   { heading: string; cards: string[] }
 > = {
   1: {
-    heading: 'Week 1: Cards 1–7 (Age of Ancient Empires)',
+    heading: 'Week 1: Timeline Cards 1\u20137',
     cards: [
       '1. Age of Ancient Empires (Creation to circa 450 A.D.)',
       '2. Creation and the Fall',
@@ -591,19 +576,19 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   2: {
-    heading: 'Week 2: Cards 8–14 (Ancient Empires & Dynasties)',
+    heading: 'Week 2: Timeline Cards 8\u201314',
     cards: [
       '8. Seven Wonders of the Ancient World',
       '9. Patriarchs of Israel',
       '10. Hittites and Canaanites',
-      '11. Kushites',
+      '11. Kush',
       '12. Assyrians',
       '13. Babylonians',
       '14. China\'s Shang Dynasty',
     ],
   },
   3: {
-    heading: 'Week 3: Cards 15–21 (Early Civilizations & Israel)',
+    heading: 'Week 3: Timeline Cards 15\u201321',
     cards: [
       '15. Hinduism in India',
       '16. Phoenicians and the Alphabet',
@@ -615,7 +600,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   4: {
-    heading: 'Week 4: Cards 22–28 (Kingdoms & Philosophers)',
+    heading: 'Week 4: Timeline Cards 22\u201328',
     cards: [
       '22. Early Native Americans',
       '23. Israel Divides into Two Kingdoms',
@@ -627,7 +612,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   5: {
-    heading: 'Week 5: Cards 29–35 (Persia & Classical Greece)',
+    heading: 'Week 5: Timeline Cards 29\u201335',
     cards: [
       '29. Judah Falls to Babylon, Temple Destroyed',
       '30. Babylon Falls to Persia',
@@ -639,7 +624,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   6: {
-    heading: 'Week 6: Cards 36–42 (Rome, Greece & Caesar)',
+    heading: 'Week 6: Timeline Cards 36\u201342',
     cards: [
       '36. India\'s Mauryan Empire',
       '37. Mayans of Mesoamerica',
@@ -651,7 +636,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   7: {
-    heading: 'Week 7: Cards 43–49 (Early Church & Roman Empire)',
+    heading: 'Week 7: Timeline Cards 43\u201349',
     cards: [
       '43. Jesus the Messiah',
       '44. Pentecost and the Early Church',
@@ -663,19 +648,19 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   8: {
-    heading: 'Week 8: Cards 50–56 (Church Councils & Middle Ages)',
+    heading: 'Week 8: Timeline Cards 50\u201356',
     cards: [
-      '50. Council of Nicaea',
+      '50. Council of Nicea',
       '51. Augustine of Hippo',
       '52. Jerome Completes the Vulgate',
       '53. Visigoths Sack Rome',
-      '54. The Middle Ages (circa 450 to circa 1500)',
+      '54. The Middle Ages (circa 450 to circa 1400)',
       '55. Council of Chalcedon',
       '56. Western Roman Empire Falls to Barbarians',
     ],
   },
   9: {
-    heading: 'Week 9: Cards 57–63 (Byzantine & Rise of Islam)',
+    heading: 'Week 9: Timeline Cards 57\u201363',
     cards: [
       '57. Byzantine Emperor Justinian',
       '58. Benedict and Monasticism',
@@ -687,9 +672,9 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   10: {
-    heading: 'Week 10: Cards 64–70 (Mound Builders to East-West Schism)',
+    heading: 'Week 10: Timeline Cards 64\u201370',
     cards: [
-      '64. Early North American Mound Builders',
+      '64. Japan\'s Heian Period',
       '65. Charlemagne Crowned Emperor of Europe',
       '66. Alfred the Great of England',
       '67. Erik the Red and Leif Eriksson, Norse Explorers',
@@ -699,7 +684,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   11: {
-    heading: 'Week 11: Cards 71–77 (Feudalism, Crusades & Americas)',
+    heading: 'Week 11: Timeline Cards 71\u201377',
     cards: [
       '71. Norman Conquest and Feudalism in Europe',
       '72. The Crusades',
@@ -711,7 +696,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   12: {
-    heading: 'Week 12: Cards 78–84 (Mongols, Magna Carta & Renaissance)',
+    heading: 'Week 12: Timeline Cards 78\u201384',
     cards: [
       '78. Genghis Khan Rules the Mongols',
       '79. England\'s Magna Carta',
@@ -723,7 +708,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   13: {
-    heading: 'Week 13: Cards 85–91 (Age of Exploration & Navigation)',
+    heading: 'Week 13: Timeline Cards 85\u201391',
     cards: [
       '85. Age of Exploration (circa 1400 to circa 1600)',
       '86. Prince Henry Founds School of Navigation',
@@ -735,7 +720,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   14: {
-    heading: 'Week 14: Cards 92–98 (Reformation & Absolute Monarchs)',
+    heading: 'Week 14: Timeline Cards 92\u201398',
     cards: [
       '92. Columbus Sails to the Caribbean',
       '93. Age of Absolute Monarchs (circa 1500 to circa 1800)',
@@ -747,7 +732,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   15: {
-    heading: 'Week 15: Cards 99–105 (Enlightenment & Colonies)',
+    heading: 'Week 15: Timeline Cards 99\u2013105',
     cards: [
       '99. Japan\'s Isolation',
       '100. Jamestown and Plymouth Colony Founded',
@@ -759,7 +744,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   16: {
-    heading: 'Week 16: Cards 106–112 (Industry, Revolutions & Lewis and Clark)',
+    heading: 'Week 16: Timeline Cards 106\u2013112',
     cards: [
       '106. Age of Industry (circa 1760 to circa 1969)',
       '107. James Cook Sails to Australia and Antarctica',
@@ -771,7 +756,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   17: {
-    heading: 'Week 17: Cards 113–119 (Napoleon & Romantic Period)',
+    heading: 'Week 17: Timeline Cards 113\u2013119',
     cards: [
       '113. Napoleon Crowned Emperor of France',
       '114. Liberation of South America',
@@ -783,7 +768,7 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
     ],
   },
   18: {
-    heading: 'Week 18: Cards 120–126 (Westward Expansion & Dred Scott)',
+    heading: 'Week 18: Timeline Cards 120\u2013126',
     cards: [
       '120. Cherokee Trail of Tears',
       '121. U.S. Westward Expansion',
@@ -791,79 +776,84 @@ export const CYCLE_3_TIMELINE_WEEKS: Record<
       '123. The Compromise of 1850 and the Dred Scott Decision',
       '124. U.S. Restores Trade with Japan',
       '125. British Queen Victoria\'s Rule Over India',
-      '126. Darwin Publishes On the Origin of Species',
+      '126. Darwin Publishes The Origin of Species',
     ],
   },
   19: {
-    heading: 'Week 19: Cards 127–133 (War Between States & Progressive Era)',
+    heading: 'Week 19: Timeline Cards 127\u2013133',
     cards: [
       '127. Lincoln\'s War Between the States',
       '128. Reconstruction of the Southern States',
       '129. Dominion of Canada',
       '130. Otto von Bismarck Unifies Germany',
-      '131. Boer War in Africa',
+      '131. Boer Wars in Africa',
       '132. The Spanish-American War',
       '133. The Progressive Era',
     ],
   },
   20: {
-    heading: 'Week 20: Cards 134–140 (World War I & Bolshevik Revolution)',
+    heading: 'Week 20: Timeline Cards 134\u2013140',
     cards: [
       '134. Australia Becomes a Commonwealth',
       '135. Mexican Revolution',
       '136. World War I and President Wilson',
       '137. Lenin and the Bolshevik Revolution in Russia',
-      '138. U.S. Evangelist Billy Sunday',
+      '138. U.S. Evangelist Billy Graham',
       '139. Modern Period of the Arts',
-      '140. Scopes Trial',
+      '140. The Great Depression and the New Deal',
     ],
   },
   21: {
-    heading: 'Week 21: Cards 141–147 (Depression, World War II & Cold War)',
+    heading: 'Week 21: Timeline Cards 141\u2013147',
     cards: [
-      '141. The Great Depression and the New Deal',
-      '142. World War II and President Franklin D. Roosevelt',
-      '143. Stalin of the USSR and the Katyn Massacre',
-      '144. The United Nations Formed',
-      '145. The Cold War',
-      '146. Gandhi and India\'s Independence',
-      '147. Jewish State Established',
+      '141. World War II and President Franklin D. Roosevelt',
+      '142. Stalin of the USSR and the Katyn Massacre',
+      '143. The United Nations Formed',
+      '144. The Cold War',
+      '145. Gandhi and India\'s Independence',
+      '146. Jewish State Established',
+      '147. Mao and Communist Victory in China',
     ],
   },
   22: {
-    heading: 'Week 22: Cards 148–154 (Civil Rights Movement & Vietnam)',
+    heading: 'Week 22: Timeline Cards 148\u2013154',
     cards: [
-      '148. Mao and Communist Victory in China',
-      '149. North Atlantic Treaty Organization Formed',
-      '150. The Korean War',
-      '151. Martin Luther King, Jr. and the Civil Rights Movement',
-      '152. Jim and Elisabeth Elliot, Missionaries to Ecuador',
-      '153. The Antarctic Treaty',
-      '154. The Vietnam War',
+      '148. North Atlantic Treaty Organization',
+      '149. The Korean War',
+      '150. Martin Luther King, Jr. and the Civil Rights Movement',
+      '151. Jim and Elisabeth Elliot, Missionaries to Ecuador',
+      '152. The Antarctic Treaty',
+      '153. The Vietnam War',
+      '154. U.S. Astronauts Walk on the Moon',
     ],
   },
   23: {
-    heading: 'Week 23: Cards 155–161 (Moon Walk to September 11, 2001)',
+    heading: 'Week 23: Timeline Cards 155\u2013161',
     cards: [
-      '155. U.S. Astronauts Walk on the Moon',
-      '156. Age of Information and Globalization (circa 1970 to the Present)',
-      '157. Watergate, President Nixon Resigns',
-      '158. Fall of Communism in Eastern Europe',
-      '159. European Union Formed',
-      '160. Apartheid Abolished in South Africa',
-      '161. September 11, 2001',
+      '155. Age of Information and Globalization (circa 1970 to the Present)',
+      '156. Watergate, President Nixon Resigns',
+      '157. Fall of Communism in Eastern Europe',
+      '158. European Union Formed',
+      '159. Apartheid Abolished in South Africa',
+      '160. September 11, 2001',
+      '161. Rising Tide of Freedom',
     ],
   },
   24: {
-    heading: 'Week 24: Presidents of the United States (Groups 1–7)',
+    heading: 'Week 24: U.S. Presidents (Cards 162\u2013173)',
     cards: [
-      'Group 1: Washington, Adams, Jefferson, Madison, Monroe',
-      'Group 2: Adams, Jackson, Van Buren, Harrison, Tyler, Polk, Taylor',
-      'Group 3: Fillmore, Pierce, Buchanan, Lincoln, Johnson, Grant, Hayes',
-      'Group 4: Garfield, Arthur, Cleveland, Harrison, Cleveland, McKinley',
-      'Group 5: Roosevelt, Taft, Wilson, Harding, Coolidge, Hoover',
-      'Group 6: Roosevelt, Truman, Eisenhower, Kennedy, Johnson, Nixon, Ford',
-      'Group 7: Carter, Reagan, Bush, Clinton, Bush, Obama, Trump, Biden, Trump',
+      '162. Washington, Adams, Jefferson, Madison',
+      '163. Monroe, Adams, Jackson, Van Buren',
+      '164. Harrison, Tyler, Polk, Taylor',
+      '165. Fillmore, Pierce, Buchanan, Lincoln',
+      '166. Johnson, Grant, Hayes, Garfield',
+      '167. Arthur, Cleveland, Harrison, Cleveland',
+      '168. McKinley, Roosevelt, Taft, Wilson',
+      '169. Harding, Coolidge, Hoover, Roosevelt',
+      '170. Truman, Eisenhower, Kennedy, Johnson',
+      '171. Nixon, Ford, Carter, Reagan',
+      '172. Bush, Clinton, Bush, Obama',
+      '173. Trump, Biden',
     ],
   },
 };
@@ -939,26 +929,26 @@ export const CYCLE_3_SCIENCE_WEEKS: Record<
   11: {
     heading: 'Week 11: The Endocrine System',
     question: 'What is the endocrine system?',
-    answer: 'The endocrine system consists of glands that secrete hormones into the bloodstream.',
-    lines: ['The endocrine system consists of glands that secrete hormones into the bloodstream.'],
+    answer: 'The endocrine system consists of glands and organs that use hormones to send messages through the bloodstream to the rest of the body.',
+    lines: ['The endocrine system consists of glands and organs that use hormones to send messages through the bloodstream to the rest of the body.'],
   },
   12: {
     heading: 'Week 12: Major Purposes of Blood',
     question: 'What are the major purposes of blood?',
-    answer: 'Transportation, protection, regulation.',
-    lines: ['Transportation, protection, regulation.'],
+    answer: 'Transportation, protection, communication, regulation.',
+    lines: ['Transportation, protection, communication, regulation.'],
   },
   13: {
     heading: 'Week 13: Atomic Number',
     question: 'What is the atomic number?',
-    answer: 'The atomic number is the number of protons in the nucleus of an atom.',
-    lines: ['The atomic number is the number of protons in the nucleus of an atom.'],
+    answer: 'The atomic number is the number of protons in the nucleus of an atom, which is also the number of electrons in a neutral atom.',
+    lines: ['The atomic number is the number of protons in the nucleus of an atom, which is also the number of electrons in a neutral atom.'],
   },
   14: {
     heading: 'Week 14: Chemical Element',
     question: 'What is an element?',
-    answer: 'An element is a basic chemical substance that cannot be broken down into simpler substances.',
-    lines: ['An element is a basic chemical substance that cannot be broken down into simpler substances.'],
+    answer: 'An element is a basic chemical substance defined by its atomic number and atomic mass.',
+    lines: ['An element is a basic chemical substance defined by its atomic number and atomic mass.'],
   },
   15: {
     heading: 'Week 15: Parts of an Atom',
@@ -987,17 +977,18 @@ export const CYCLE_3_SCIENCE_WEEKS: Record<
   19: {
     heading: 'Week 19: Acids and Bases',
     question: 'What is the difference between an acid and a base?',
-    answer: 'An acid donates a hydrogen ion and tastes sour; a base accepts a hydrogen ion and tastes bitter.',
+    answer: 'An acid donates a hydrogen ion and a base accepts a hydrogen ion.',
     lines: [
-      'An acid donates a hydrogen ion and tastes sour; a base accepts a hydrogen ion and tastes bitter.',
+      'An acid donates a hydrogen ion and a base accepts a hydrogen ion.',
     ],
   },
   20: {
-    heading: 'Week 20: Chemical Bonds of DNA',
-    question: 'What do the chemical bonds of DNA consist of?',
-    answer: 'Pairs of hydrogen-bonded nucleotide bases: adenine and thymine, guanine and cytosine.',
+    heading: 'Week 20: What the Heavens Declare',
+    question: 'What do the heavens declare?',
+    answer:
+      'The heavens declare the glory of God; the skies proclaim the work of his hands. (Psalm 19:1 NIV)',
     lines: [
-      'Pairs of hydrogen-bonded nucleotide bases: adenine and thymine, guanine and cytosine.',
+      'The heavens declare the glory of God; the skies proclaim the work of his hands. (Psalm 19:1 NIV)',
     ],
   },
   21: {
@@ -1179,15 +1170,15 @@ export const CYCLE_3_ENGLISH_WEEKS: Record<
     topic: 'Independent Clause',
     heading: 'Week 20: Independent Clause',
     prompt: 'Independent Clause',
-    answer: 'An independent clause expresses a complete thought and can stand alone as a sentence.',
-    lines: ['An independent clause expresses a complete thought and can stand alone as a sentence.'],
+    answer: 'An independent clause expresses a complete thought like a sentence.',
+    lines: ['An independent clause expresses a complete thought like a sentence.'],
   },
   21: {
     topic: 'Subordinate Clause',
     heading: 'Week 21: Subordinate Clause',
     prompt: 'Subordinate Clause',
-    answer: 'A subordinate clause does not express a complete thought and cannot stand alone.',
-    lines: ['A subordinate clause does not express a complete thought and cannot stand alone.'],
+    answer: 'A subordinate clause, also known as a dependent clause, does not express a complete thought and cannot stand alone.',
+    lines: ['A subordinate clause, also known as a dependent clause, does not express a complete thought and cannot stand alone.'],
   },
   22: {
     topic: 'Phrase',
@@ -1223,19 +1214,19 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
   1: {
     heading: 'Tell me about Columbus.',
     lines: [
-      'In 1492, Columbus made the first of four trips to the Caribbean on three Spanish ships named the Nina, the Pinta, and the Santa Maria.',
+      'In 1492, Columbus made the first of four trips to the Caribbean on three Spanish ships named the Niña, the Pinta, and the Santa María.',
     ],
   },
   2: {
     heading: 'Tell me about the Pilgrims.',
     lines: [
-      'In 1620, the Pilgrims sailed from Plymouth, England, and signed the Mayflower Compact before founding Plymouth Colony in North America.',
+      'In 1620, the Pilgrims sailed from Plymouth, England and signed the Mayflower Compact before founding Plymouth Colony in North America.',
     ],
   },
   3: {
     heading: 'Tell me about the Boston Tea Party.',
     lines: [
-      'In 1773, the Boston Tea Party took place when colonists dumped British tea into Boston Harbor to protest taxation without representation.',
+      'In 1773, colonists disguised as Mohawks dumped tea from the British East India Company into the Boston Harbor.',
     ],
   },
   4: {
@@ -1247,7 +1238,7 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
   5: {
     heading: 'Tell me about George Washington.',
     lines: [
-      'In 1789, in New York, George Washington was inaugurated as the first President of the United States.',
+      'In 1789, in New York, George Washington was granted the full powers and responsibilities of the presidency by the U.S. Constitution.',
     ],
   },
   6: {
@@ -1259,7 +1250,7 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
   7: {
     heading: 'Tell me about the Monroe Doctrine.',
     lines: [
-      'In 1823, the Monroe Doctrine warned European powers not to attempt further colonization in the Americas.',
+      'After victory in the War of 1812, the United States wrote the Monroe Doctrine, which warned Europeans not to attempt to colonize the Americas.',
     ],
   },
   8: {
@@ -1269,7 +1260,7 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
     ],
   },
   9: {
-    heading: 'Tell me about the Compromise of 1850.',
+    heading: 'Tell me about the secession of the Southern states.',
     lines: [
       'The Compromise of 1850, the Fugitive Slave Act, and the Dred Scott decision preceded the secession of the Southern states.',
     ],
@@ -1283,35 +1274,35 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
   11: {
     heading: 'Tell me about the Civil War.',
     lines: [
-      'In 1861, the Civil War began when President Abraham Lincoln went to war with the southern states that seceded from the Union.',
+      'In 1861, the Civil War began when President Abraham Lincoln went to war with the Southern states that had seceded from the Union.',
     ],
   },
   12: {
     heading: 'Tell me about General Robert E. Lee.',
     lines: [
-      'In 1865, General Robert E. Lee surrendered his Army of Northern Virginia to General Ulysses S. Grant at Appomattox Court House in Virginia.',
+      'In 1865, General Robert E. Lee surrendered to General Ulysses S. Grant at Appomattox Court House in Virginia.',
     ],
   },
   13: {
     heading: 'Tell me about the Fourteenth Amendment.',
     lines: [
-      'In 1868, the Fourteenth Amendment made all persons born or naturalized in the United States citizens, ensuring equal protection under the law.',
+      'In 1868, the Fourteenth Amendment made all former slaves U.S. citizens and paved the way for the Civil Rights Movement.',
     ],
   },
   14: {
-    heading: 'Tell me about tycoons of industry.',
+    heading: 'Tell me about tycoons.',
     lines: [
-      'During the late 1800s, tycoons like Vanderbilt, Rockefeller, Carnegie, and Swift fueled the nation\'s industrial age by developing American resources.',
+      'During the late 1800s, tycoons like Vanderbilt, Rockefeller, Carnegie, and Swift fueled the nation\'s Industrial Age by developing American resources.',
     ],
   },
   15: {
-    heading: 'Tell me about immigrants.',
+    heading: 'Tell me about immigrants coming to America.',
     lines: [
-      'From 1820 to 1930, more than 37 million immigrants arrived in the United States, seeking freedom and opportunities to increase their personal wealth.',
+      'From 1820 to 1930, more than 37 million immigrants came to America, seeking freedom and the opportunity to increase their personal wealth.',
     ],
   },
   16: {
-    heading: 'Tell me about World War I.',
+    heading: 'Tell me about the United States and World War I.',
     lines: [
       'In 1917, President Wilson asked Congress to enter World War I against the Central Powers two years after German U-boats sank the Lusitania, killing American citizens.',
     ],
@@ -1319,7 +1310,7 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
   17: {
     heading: 'Tell me about the Nineteenth Amendment.',
     lines: [
-      'In 1920, the Nineteenth Amendment to the U.S. Constitution granted women the right to vote.',
+      "Elizabeth Cady Stanton and Susan B. Anthony led the women's suffrage movement in the United States, resulting in the Nineteenth Amendment in 1920 that granted women the right to vote.",
     ],
   },
   18: {
@@ -1329,48 +1320,48 @@ export const CYCLE_3_HISTORY_WEEKS: Record<
     ],
   },
   19: {
-    heading: 'Tell me about the formation of NATO.',
+    heading: 'Tell me about NATO.',
     lines: [
-      'In 1949, the United States and its allies formed the North Atlantic Treaty Organization to resist the spread of Soviet communism.',
+      'In 1949, the United States and its allies formed NATO to resist the spread of Soviet communism.',
     ],
   },
   20: {
     heading: 'Tell me about Brown v. Board of Education.',
     lines: [
-      'In 1954, in Brown versus Board of Education, the Supreme Court ruled that racial segregation in public schools was unconstitutional.',
+      'In 1954, in Brown v. Board of Education, the U.S. Supreme Court ruled that the segregation of public schools by race is unconstitutional.',
     ],
   },
   21: {
-    heading: 'Tell me about the U.S. astronauts.',
+    heading: 'Tell me about U.S. astronauts.',
     lines: [
-      'In 1969, U.S. astronaut Neil Armstrong stepped onto the Moon, declaring, "That\'s one small step for man, one giant leap for mankind."',
+      'In 1969, U.S. astronauts Neil Armstrong and Edwin Aldrin were the first men to walk on the moon.',
     ],
   },
   22: {
     heading: 'Tell me about September 11, 2001.',
     lines: [
-      'On September 11, 2001, terrorists hijacked four airplanes. They flew two into the World Trade Center in New York City, and one into the Pentagon in Washington, D.C. The fourth plane crashed into a Pennsylvania field.',
+      'On September 11, 2001, terrorists hijacked four airplanes. They flew two into the World Trade Center in New York City, and one into the Pentagon in Washington, DC. The fourth plane crashed into a Pennsylvania field.',
     ],
   },
   23: {
-    heading: 'The Preamble to the U.S. Constitution.',
+    heading: 'Tell me the Preamble to the U.S. Constitution.',
     lines: [
-      'We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.',
+      'We the People of the United States, in order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defense, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.',
     ],
   },
   24: {
-    heading: 'The Bill of Rights.',
+    heading: 'Tell me the Bill of Rights.',
     lines: [
-      'Amendment 1: Freedom of religion, speech, press, assembly, and petition.',
-      'Amendment 2: The right to keep and bear arms.',
-      'Amendment 3: No quartering of soldiers in private homes.',
-      'Amendment 4: No unreasonable searches and seizures.',
-      'Amendment 5: Due process, no self-incrimination, no double jeopardy.',
-      'Amendment 6: The right to a speedy and public trial by jury.',
-      'Amendment 7: The right to a jury trial in civil lawsuits.',
-      'Amendment 8: No excessive bail or cruel and unusual punishment.',
-      'Amendment 9: Rights retained by the people not listed here.',
-      'Amendment 10: Powers not given to the federal government belong to the states.',
+      '1. Freedoms',
+      '2. Own guns',
+      '3. Quartering soldiers',
+      '4. Warrants',
+      '5. Cannot testify against self',
+      '6. Right to speedy trial',
+      '7. Right to a jury',
+      '8. Cruel, unusual punishment',
+      "9. People's rights",
+      "10. States' rights",
     ],
   },
 };
@@ -1427,9 +1418,24 @@ export function getSubjectGuideData(
     };
   }
 
-  // Cycle 1 verified sample weeks (from Melanie's guide pages; the rest stay placeholders)
-  if (cycle === 1) {
-    const rec = CYCLE_1_WEEKS[subject]?.[week];
+  // The Timeline (161 events + U.S. presidents) is identical in all three
+  // cycles, verified against the Cycle 1, 2, and 3 Summary Proof Sheets.
+  if (subject === 'timeline') {
+    const timeData = CYCLE_3_TIMELINE_WEEKS[week];
+    if (timeData) {
+      return {
+        week,
+        hasGuidePage: true,
+        heading: timeData.heading,
+        lines: timeData.cards,
+        items: timeData.cards.map((l) => ({ text: l, type: 'memoryWork' as const })),
+      };
+    }
+  }
+
+  // Cycles 1 & 2: complete data transcribed from the Summary Proof Sheets.
+  if (cycle === 1 || cycle === 2) {
+    const rec = (cycle === 1 ? CYCLE_1_WEEKS : CYCLE_2_WEEKS)[subject]?.[week];
     if (rec) {
       const items: WorksheetItem[] = rec.lines.map((line, idx2) => ({
         text: line,
@@ -1490,13 +1496,12 @@ export function getSubjectGuideData(
     if (cycle === 3) {
       const geo = CYCLE_3_GEOGRAPHY_WEEKS[week];
       if (geo) {
-        const lines = geo.states.map((s) => `${s.state} - ${s.capital}`);
         return {
           week,
           hasGuidePage: true,
           heading: geo.heading,
-          lines,
-          items: lines.map((l) => ({ text: l, type: 'memoryWork' as const })),
+          lines: geo.lines,
+          items: geo.lines.map((l) => ({ text: l, type: 'memoryWork' as const })),
         };
       }
     }

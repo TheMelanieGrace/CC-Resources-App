@@ -642,8 +642,8 @@ export const TracingTool: React.FC<TracingToolProps> = ({
 
       if (subjs.geography) {
         const geo = CYCLE_3_GEOGRAPHY_WEEKS[targetWeek];
-        if (geo && geo.states && geo.states.length > 0) {
-          const gLines = geo.states.map((s) => `${s.state} - ${s.capital}`);
+        if (geo && geo.lines && geo.lines.length > 0) {
+          const gLines = geo.lines;
           lines.push(...gLines);
           loadedItems.push(...gLines.map((l) => ({ text: l, type: 'memoryWork' as const })));
           loadedNames.push('Geography');
@@ -784,12 +784,12 @@ export const TracingTool: React.FC<TracingToolProps> = ({
           if (cycle === 3) {
             const geo = CYCLE_3_GEOGRAPHY_WEEKS[w];
             if (geo) {
-              const geoLines = geo.states.map((s) => `${s.state} - ${s.capital}`);
+              const geoLines = geo.lines;
               sections.push({
                 id: `sec-${w}-geography`,
                 week: w,
                 subject: 'geography',
-                heading: `${geo.heading} (States & Capitals)`,
+                heading: geo.heading,
                 isPlaceholder: false,
                 lines: geoLines,
                 items: geoLines.map((l) => ({ text: l, type: 'memoryWork' as const })),
@@ -798,12 +798,58 @@ export const TracingTool: React.FC<TracingToolProps> = ({
               plainLines.push(...geoLines);
             }
           } else {
-            // Cycle 1 & 2 world geography pages not uploaded yet
+            // Cycle 1 & 2 world geography, verbatim from the Summary Proof Sheets
+            const geoData = getSubjectGuideData(cycle, 'geography', w);
+            if (geoData.hasGuidePage && geoData.lines.length > 0) {
+              sections.push({
+                id: `sec-${w}-geography`,
+                week: w,
+                subject: 'geography',
+                prompt: geoData.prompt,
+                heading: geoData.heading,
+                isPlaceholder: false,
+                lines: geoData.lines,
+                items: geoData.items,
+              });
+              plainLines.push(`--- Week ${w} Geography ---`);
+              plainLines.push(...geoData.lines);
+            } else {
+              sections.push({
+                id: `sec-${w}-geography-ph`,
+                week: w,
+                subject: 'geography',
+                heading: `Cycle ${cycle} World Geography`,
+                isPlaceholder: true,
+                placeholderText: `Week ${w}: upload this guide page`,
+                lines: [],
+                items: [{ text: `Week ${w}: upload this guide page`, type: 'note' as const }],
+              });
+              plainLines.push(`[Week ${w}: upload this guide page]`);
+            }
+          }
+        } else if (subj === 'latin' && cycle !== 3) {
+          // Cycle 1 declension tables / Cycle 2 conjugation endings,
+          // verbatim from the Summary Proof Sheets
+          const latData = getSubjectGuideData(cycle, 'latin', w);
+          if (latData.hasGuidePage && latData.lines.length > 0) {
             sections.push({
-              id: `sec-${w}-geography-ph`,
+              id: `sec-${w}-latin`,
               week: w,
-              subject: 'geography',
-              heading: `Cycle ${cycle} World Geography`,
+              subject: 'latin',
+              prompt: latData.prompt,
+              heading: latData.heading,
+              isPlaceholder: false,
+              lines: latData.lines,
+              items: latData.items,
+            });
+            plainLines.push(`--- Week ${w} Latin ---`);
+            plainLines.push(...latData.lines);
+          } else {
+            sections.push({
+              id: `sec-${w}-latin-ph`,
+              week: w,
+              subject: 'latin',
+              heading: `Week ${w} Latin`,
               isPlaceholder: true,
               placeholderText: `Week ${w}: upload this guide page`,
               lines: [],
@@ -2556,7 +2602,7 @@ export const TracingTool: React.FC<TracingToolProps> = ({
                               <td className="p-2.5 text-[#44514A]">
                                 {geo ? (
                                   <div className="font-mono text-[11px]">
-                                    {geo.states.map((s) => `${s.state} (${s.capital})`).join(' • ')}
+                                    {geo.lines.join(' • ')}
                                   </div>
                                 ) : (
                                   'Review week'
@@ -2569,25 +2615,12 @@ export const TracingTool: React.FC<TracingToolProps> = ({
                               </td>
                             </tr>
                           );
-                        } else {
-                          return (
-                            <tr key={wk} className="hover:bg-[#FFFFFF]">
-                              <td className="p-2.5 font-bold text-center text-[#2F5D50]">Week {wk}</td>
-                              <td className="p-2.5 font-semibold text-[#2E2B26]">Cycle {modalCycleTab} World Geo</td>
-                              <td className="p-2.5 text-amber-800 italic font-mono">
-                                [Week {wk}: upload this guide page]
-                              </td>
-                              <td className="p-2.5 text-center">
-                                <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">
-                                  Missing Guide Photo
-                                </span>
-                              </td>
-                            </tr>
-                          );
                         }
+                        // Cycles 1 & 2 world geography fall through to the
+                        // generic Summary Proof Sheet rows below.
                       }
 
-                      if (modalSubjectTab === 'latin') {
+                      if (modalSubjectTab === 'latin' && modalCycleTab === 3) {
                         const latinWeeks = LATIN_MEMORY_WORK[modalCycleTab] || [];
                         const found = latinWeeks.find((item) => item.week === wk);
 
@@ -2676,7 +2709,7 @@ export const TracingTool: React.FC<TracingToolProps> = ({
                               </span>
                             ) : guideData.hasGuidePage ? (
                               <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
-                                {modalCycleTab === 3 ? 'Summary Proof Sheet' : 'Uploaded Guide'}
+                                Summary Proof Sheet
                               </span>
                             ) : (
                               <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">

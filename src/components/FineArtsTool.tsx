@@ -21,6 +21,7 @@ interface FineArtsWeek {
   name?: string; // artist/composer name for tracing
   img?: string; // public-domain portrait in /images/arts
   imgCredit?: string;
+  imgNote?: string; // note shown when an artist page has no portrait
   facts?: string[]; // universal facts, authored for this app
   listen?: string; // the piece for composer weeks
 }
@@ -129,16 +130,203 @@ const WEEKS: FineArtsWeek[] = [
   { week: 24, topic: 'Orchestra Review and Celebration', kind: 'guide' },
 ];
 
+/**
+ * Cycle 1 & 2 Fine Arts weeks 13-24, from the guide's Great Artists and
+ * Composers & Orchestra charts (all three cycles on one table). Weeks 1-12
+ * (drawing + music theory) are shared across cycles, so they come from the
+ * base WEEKS list. Facts are universal knowledge authored for this app.
+ * These artists' works are long in the public domain; portrait plates can
+ * be added in a later pass.
+ */
+const PD_NOTE =
+  "This artist's works are in the public domain; a portrait plate is coming in a future update. See the real works in your guide or at the library!";
+
+const CYCLE_FA_OVERRIDES: Record<1 | 2, Record<number, FineArtsWeek>> = {
+  1: {
+    13: {
+      week: 13, topic: 'Great Artists: Giotto', kind: 'artist', name: 'Giotto', imgNote: PD_NOTE,
+      facts: [
+        'An Italian painter, born around 1266, often called the father of European painting.',
+        'He made flat, stiff medieval figures look round, solid, and full of feeling.',
+        'His greatest work is the fresco cycle covering the Scrovegni Chapel in Padua.',
+        "Legend says he once proved his skill by drawing a perfect circle freehand: Giotto's O.",
+      ],
+    },
+    14: {
+      week: 14, topic: 'Great Artists: Ghiberti', kind: 'artist', name: 'Lorenzo Ghiberti', imgNote: PD_NOTE,
+      facts: [
+        'A Florentine sculptor and goldsmith of the early Renaissance.',
+        'In 1401 he won a famous contest to make the bronze doors of the Florence Baptistery.',
+        'He spent about fifty years crafting two sets of doors, panel by panel, in relief.',
+        'Michelangelo admired the second set so much he called them the Gates of Paradise.',
+      ],
+    },
+    15: {
+      week: 15, topic: 'Great Artists: Angelico', kind: 'artist', name: 'Fra Angelico', imgNote: PD_NOTE,
+      facts: [
+        'An Italian friar who painted; his name means the Angelic Brother.',
+        'He painted glowing frescoes right on the walls of the monastery of San Marco in Florence.',
+        'His pictures are known for gentle faces, clear colors, and shining gold.',
+        'It is said he prayed before he picked up his brush and never repainted what he believed God gave him.',
+      ],
+    },
+    16: {
+      week: 16, topic: 'Great Artists: Dürer', kind: 'artist', name: 'Albrecht Dürer', imgNote: PD_NOTE,
+      facts: [
+        'A German artist from Nuremberg, master of the Northern Renaissance.',
+        'He made woodcuts and engravings so fine that they amazed all of Europe.',
+        'He drew a famous rhinoceros without ever seeing one, and the beloved Praying Hands.',
+        'He painted careful self-portraits and signed everything with his bold AD monogram.',
+      ],
+    },
+    17: {
+      week: 17, topic: 'Great Artists: Michelangelo', kind: 'artist', name: 'Michelangelo', imgNote: PD_NOTE,
+      facts: [
+        'An Italian sculptor, painter, and architect of the High Renaissance.',
+        'He carved the marble David and the Pietà while still a young man.',
+        'He spent four years painting the ceiling of the Sistine Chapel on high scaffolding.',
+        "Late in life he designed the great dome of St. Peter's Basilica in Rome.",
+      ],
+    },
+    18: {
+      week: 18, topic: 'Great Artists: El Greco', kind: 'artist', name: 'El Greco', imgNote: PD_NOTE,
+      facts: [
+        'Born on the island of Crete; his nickname is Spanish for The Greek.',
+        'He settled in Toledo, Spain, and painted its stormy skies and saints.',
+        'His figures are long and stretched, lit as if by flashes of light.',
+        'His style looked strange in his own day but feels almost modern now.',
+      ],
+    },
+    19: { week: 19, topic: 'Composers Introduction: Baroque & Classical Periods', kind: 'skill' },
+    20: {
+      week: 20, topic: 'Composer Study: Handel', kind: 'composer', name: 'George Frideric Handel',
+      listen: 'Water Music Suite',
+      facts: [
+        'A German-born composer who made his home in London.',
+        "He wrote the Water Music for King George I's grand barge party on the River Thames.",
+        'His Messiah includes the famous Hallelujah Chorus.',
+      ],
+    },
+    21: {
+      week: 21, topic: 'Composer Study: Bach', kind: 'composer', name: 'Johann Sebastian Bach',
+      listen: 'The Well-Tempered Clavier: Prelude and Fugue in C Major',
+      facts: [
+        'A German organist and composer from a huge family of musicians.',
+        'In a fugue, one melody starts and the other voices chase it in turn.',
+        'He signed many works S.D.G.: Soli Deo Gloria, glory to God alone.',
+      ],
+    },
+    22: {
+      week: 22, topic: 'Composer Study: Mozart', kind: 'composer', name: 'Wolfgang Amadeus Mozart',
+      listen: 'Piano Concerto No. 22 in E-flat, Third Movement',
+      facts: [
+        'He began composing at five and toured Europe as a child performer.',
+        'He wrote more than six hundred works in his short life.',
+        'His melodies sound effortless, as if they had always existed.',
+      ],
+    },
+  },
+  2: {
+    13: {
+      week: 13, topic: 'Great Artists: Rembrandt', kind: 'artist', name: 'Rembrandt van Rijn', imgNote: PD_NOTE,
+      facts: [
+        'A Dutch painter, the great master of light and shadow.',
+        'He painted about eighty self-portraits across his whole life.',
+        'His huge group portrait The Night Watch seems to step out of the dark.',
+        'He was also a brilliant etcher whose small prints were prized across Europe.',
+      ],
+    },
+    14: {
+      week: 14, topic: 'Great Artists: Gainsborough', kind: 'artist', name: 'Thomas Gainsborough', imgNote: PD_NOTE,
+      facts: [
+        'An English painter famous for elegant portraits.',
+        'His most famous picture is the shimmering Blue Boy.',
+        'He painted with quick, feathery strokes that sparkle up close.',
+        'He said he loved painting landscapes best, and tucked them behind his portraits.',
+      ],
+    },
+    15: {
+      week: 15, topic: 'Great Artists: Degas', kind: 'artist', name: 'Edgar Degas', imgNote: PD_NOTE,
+      facts: [
+        'A French artist who painted ballet dancers hundreds of times.',
+        'He framed scenes at surprising angles, like candid snapshots.',
+        'He loved soft, chalky pastels as much as oil paint.',
+        'His wax sculpture Little Dancer, Aged Fourteen wears a real fabric skirt.',
+      ],
+    },
+    16: {
+      week: 16, topic: 'Great Artists: Monet', kind: 'artist', name: 'Claude Monet', imgNote: PD_NOTE,
+      facts: [
+        'A French painter; Impressionism is named after his painting Impression, Sunrise.',
+        'He painted the same haystacks and cathedral again and again in changing light.',
+        'He built a garden with a lily pond at Giverny and painted it for thirty years.',
+        'He worked outdoors to catch the light before it changed.',
+      ],
+    },
+    17: {
+      week: 17, topic: 'Great Artists: Morisot', kind: 'artist', name: 'Berthe Morisot', imgNote: PD_NOTE,
+      facts: [
+        'A French painter, one of the first women of Impressionism.',
+        'She showed her work in nearly every Impressionist exhibition.',
+        'She painted quiet moments of home life: mothers, children, and gardens.',
+        'Her quick, feathery brushstrokes make her pictures feel full of air.',
+      ],
+    },
+    18: {
+      week: 18, topic: 'Great Artists: van Gogh', kind: 'artist', name: 'Vincent van Gogh', imgNote: PD_NOTE,
+      facts: [
+        'A Dutch painter who used thick, swirling strokes of brilliant color.',
+        'He painted The Starry Night and the golden Sunflowers.',
+        'He made about nine hundred paintings in only ten years.',
+        'He sold almost nothing in his lifetime, yet now the whole world loves his work.',
+      ],
+    },
+    19: { week: 19, topic: 'Composers Introduction: Classical & Romantic Periods', kind: 'skill' },
+    20: {
+      week: 20, topic: 'Composer Study: Beethoven', kind: 'composer', name: 'Ludwig van Beethoven',
+      listen: 'Symphony No. 5',
+      facts: [
+        'A German composer who bridged the Classical and Romantic periods.',
+        'The four-note opening of his Fifth Symphony is said to be fate knocking at the door.',
+        'He kept composing masterpieces even after he lost his hearing.',
+      ],
+    },
+    21: {
+      week: 21, topic: 'Composer Study: Brahms', kind: 'composer', name: 'Johannes Brahms',
+      listen: 'Symphony No. 4',
+      facts: [
+        'A German Romantic composer and a careful perfectionist.',
+        'He worked on his first symphony for more than twenty years.',
+        'He also wrote the gentle Lullaby that babies still hear every night.',
+      ],
+    },
+    22: {
+      week: 22, topic: 'Composer Study: Dvořák', kind: 'composer', name: 'Antonín Dvořák',
+      listen: 'Serenade for Strings',
+      facts: [
+        'A Czech composer who wove the folk tunes of Bohemia into his music.',
+        'His Serenade for Strings dances and sings without a single wind instrument.',
+        'He later moved to America and wrote the New World Symphony.',
+      ],
+    },
+  },
+};
+
 const PAGE_W = 816;
 
 export const FineArtsTool: React.FC = () => {
+  const [cycle, setCycle] = useState<1 | 2 | 3>(3);
   const [week, setWeek] = useState(13);
   const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const data = WEEKS.find((w) => w.week === week)!;
+  const base = WEEKS.find((w) => w.week === week)!;
+  const data = cycle === 3 ? base : CYCLE_FA_OVERRIDES[cycle][week] ?? base;
+  const weekList = WEEKS.map((w) =>
+    cycle === 3 ? w : CYCLE_FA_OVERRIDES[cycle][w.week] ?? w
+  );
 
   const handlePrint = () => {
     const pagesHtml = pageRefs.current.filter(Boolean).map((el) => el!.innerHTML);
-    printWorksheetPages({ pagesHtml, docTitle: `Fine Arts Week ${week}` });
+    printWorksheetPages({ pagesHtml, docTitle: `Cycle ${cycle} Fine Arts Week ${week}` });
   };
 
   const footer = (
@@ -161,11 +349,26 @@ export const FineArtsTool: React.FC = () => {
 
       <div className="grid md:grid-cols-[280px_1fr] gap-5 items-start">
         <div className="bg-white border border-[#D5DED8] rounded-xl p-4 space-y-3 no-print">
+          <div>
+            <div className="text-xs font-bold text-[#2E2B26] mb-1">Cycle</div>
+            <div className="flex gap-1.5">
+              {([1, 2, 3] as const).map((c) => (
+                <button key={c} type="button" onClick={() => setCycle(c)}
+                  className={`flex-1 text-xs font-bold px-2 py-1.5 rounded border cursor-pointer ${
+                    cycle === c
+                      ? 'bg-[#2F5D50] text-white border-[#2F5D50]'
+                      : 'bg-white text-[#44514A] border-[#C2CFC6] hover:border-[#2F5D50]'
+                  }`}>
+                  Cycle {c}
+                </button>
+              ))}
+            </div>
+          </div>
           <label className="block text-xs font-bold text-[#2E2B26]">
             Week
             <select value={week} onChange={(e) => setWeek(Number(e.target.value))}
               className="mt-1 w-full text-xs border border-[#C2CFC6] rounded p-1.5">
-              {WEEKS.map((w) => <option key={w.week} value={w.week}>Week {w.week}: {w.topic}</option>)}
+              {weekList.map((w) => <option key={w.week} value={w.week}>Week {w.week}: {w.topic}</option>)}
             </select>
           </label>
           <p className="text-[11px] text-[#5C6B62]">
@@ -181,7 +384,7 @@ export const FineArtsTool: React.FC = () => {
             style={{ width: PAGE_W, minHeight: 1056, padding: '40px 48px' }}>
             <div className="flex items-end justify-between border-b-2 border-[#2E2B26] pb-2 mb-4">
               <div>
-                <div className="text-lg font-extrabold text-[#2E2B26]">Fine Arts · Week {data.week}</div>
+                <div className="text-lg font-extrabold text-[#2E2B26]">Fine Arts · Cycle {cycle} · Week {data.week}</div>
                 <div className="text-[10px] text-[#7C8880]">{data.topic}</div>
               </div>
               <div className="text-xs text-[#44514A]">Name: ____________________ &nbsp; Date: ________</div>
@@ -244,8 +447,8 @@ export const FineArtsTool: React.FC = () => {
 
                 {data.kind === 'artist' && !data.img && (
                   <p className="text-[10px] text-[#7C8880] mt-4 italic">
-                    This artist's photographs and paintings are still under copyright, so this page carries facts
-                    instead of pictures. See the real works in your guide or at the library!
+                    {data.imgNote ??
+                      "This artist's photographs and paintings are still under copyright, so this page carries facts instead of pictures. See the real works in your guide or at the library!"}
                   </p>
                 )}
               </>
