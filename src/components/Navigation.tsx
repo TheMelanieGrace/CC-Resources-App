@@ -49,16 +49,11 @@ export const Navigation: React.FC<NavigationProps> = ({
               onClick={() => onSelectTool('home')}
               className="text-lg sm:text-xl font-bold tracking-tight text-[#2E2B26] cursor-pointer hover:text-[#2F5D50] transition-colors leading-tight"
             >
-              CC Classroom Tools
+              CC Resources App
             </h1>
             <p className="text-xs sm:text-sm text-[#5C6B62] font-medium leading-tight mt-0.5">
               Custom Tools for Classical Homeschool Parents & Tutors
             </p>
-            {currentTool === 'home' && (
-              <p className="text-[11px] sm:text-xs text-[#7C8880] font-normal leading-tight mt-0.5 print:hidden">
-                Give your students more, every community day. Made by a CC parent, for CC parents.
-              </p>
-            )}
           </div>
         </div>
 

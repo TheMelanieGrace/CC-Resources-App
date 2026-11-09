@@ -1,9 +1,20 @@
 import React from 'react';
 import { PenTool, Map, Calculator, GitFork, FileEdit, SpellCheck, Palette, BookType, HeartPulse, Landmark, ArrowRight } from 'lucide-react';
 import type { ActiveTool } from '../App';
+import type { StarterCategory } from '../data/starterPacks';
+import { FoundationsExtras, EssentialsExtras } from './HubExtras';
+
+export type SelectToolFn = (
+  tool: ActiveTool,
+  options?: {
+    category?: StarterCategory;
+    presidentsConfig?: { mode: 'order' | 'vps'; start: number; end: number };
+    billOfRightsConfig?: { start: number; end: number };
+  }
+) => void;
 
 interface HubProps {
-  onSelectTool: (tool: ActiveTool) => void;
+  onSelectTool: SelectToolFn;
 }
 
 const Card: React.FC<{
@@ -57,6 +68,7 @@ export const FoundationsHub: React.FC<HubProps> = ({ onSelectTool }) => (
         desc="Week-by-week art companion: drawing practice sheets, Great Artists studies with public-domain portraits and facts, and composer listening pages."
         cta="Open Fine Arts" onClick={() => onSelectTool('finearts')} />
     </div>
+    <FoundationsExtras onSelectTool={onSelectTool} />
   </div>
 );
 
@@ -84,5 +96,6 @@ export const EssentialsHub: React.FC<HubProps> = ({ onSelectTool }) => (
         desc="Charts and definitions from the Essentials guide as handwriting practice: sentence patterns, structures, and parts."
         cta="Open Tracing" onClick={() => onSelectTool('tracing')} />
     </div>
+    <EssentialsExtras />
   </div>
 );

@@ -1098,7 +1098,7 @@ export const TracingTool: React.FC<TracingToolProps> = ({
   };
 
   const getPackOptionLabel = (pack: StarterPack, category: StarterCategory | null): string => {
-    if (category === 'Latin' || category === 'Science' || category === 'Bible') {
+    if (category === 'Latin' || category === 'English' || category === 'Science' || category === 'Bible') {
       const cycle = getPackCycle(pack);
       if (cycle) {
         return `[${cycle}] ${pack.label}`;
@@ -1116,6 +1116,13 @@ export const TracingTool: React.FC<TracingToolProps> = ({
             p.category === 'Latin' ||
             p.id.includes('latin') ||
             p.label.toLowerCase().startsWith('latin:')
+          );
+        }
+        if (selectedCategory === 'English') {
+          return (
+            p.category === 'English' ||
+            p.id.includes('english') ||
+            p.label.toLowerCase().startsWith('english:')
           );
         }
         if (selectedCategory === 'Science') {
