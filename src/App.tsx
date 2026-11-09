@@ -130,7 +130,7 @@ export default function App() {
 
       {/* Footer on every page of the app */}
       <footer className="no-print bg-[#FFFFFF] border-t border-[#D5DED8]/60 py-3.5 px-4 text-center">
-        <p className="text-[11px] sm:text-xs text-[#7C8880] whitespace-nowrap tracking-wide">
+        <p className="text-[11px] sm:text-xs text-[#7C8880] sm:whitespace-nowrap tracking-wide">
           Made by Melanie F., a CC Parent. Not affiliated with Classical Conversations.
         </p>
       </footer>
