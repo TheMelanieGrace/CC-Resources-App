@@ -10,9 +10,10 @@ import { FoundationsHub, EssentialsHub } from './components/Hubs';
 import { SpellingTool } from './components/SpellingTool';
 import { FineArtsTool } from './components/FineArtsTool';
 import { VerbChartTool } from './components/VerbChartTool';
+import { AnatomyTool } from './components/AnatomyTool';
 import { StarterCategory } from './data/starterPacks';
 
-export type ActiveTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs';
+export type ActiveTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs' | 'anatomy';
 
 export default function App() {
   const [currentTool, setCurrentTool] = useState<ActiveTool>('home');
@@ -35,7 +36,7 @@ export default function App() {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'foundations', 'essentials', 'tracing', 'diagram', 'geography', 'math', 'editor', 'spelling', 'finearts', 'verbs'].includes(hash)) {
+      if (['home', 'foundations', 'essentials', 'tracing', 'diagram', 'geography', 'math', 'editor', 'spelling', 'finearts', 'verbs', 'anatomy'].includes(hash)) {
         setCurrentTool(hash as ActiveTool);
       }
     };
@@ -96,6 +97,7 @@ export default function App() {
         {currentTool === 'editor' && <EditorPracticeTool />}
         {currentTool === 'spelling' && <SpellingTool onAddToWorksheet={handleAddToWorksheet} />}
         {currentTool === 'finearts' && <FineArtsTool />}
+        {currentTool === 'anatomy' && <AnatomyTool />}
         {currentTool === 'verbs' && <VerbChartTool />}
         {currentTool === 'tracing' && (
           <TracingTool

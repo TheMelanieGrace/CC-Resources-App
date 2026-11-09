@@ -1,9 +1,9 @@
 import React from 'react';
 import { ArrowLeft, Printer, BookOpen, GraduationCap, Home as HomeIcon } from 'lucide-react';
 
-type NavTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs';
+type NavTool = 'home' | 'foundations' | 'essentials' | 'tracing' | 'diagram' | 'geography' | 'math' | 'editor' | 'spelling' | 'finearts' | 'verbs' | 'anatomy';
 
-const FOUNDATIONS_GROUP: NavTool[] = ['foundations', 'tracing', 'geography', 'math', 'finearts'];
+const FOUNDATIONS_GROUP: NavTool[] = ['foundations', 'tracing', 'geography', 'math', 'finearts', 'anatomy'];
 const ESSENTIALS_GROUP: NavTool[] = ['essentials', 'diagram', 'editor', 'spelling', 'verbs'];
 
 interface NavigationProps {

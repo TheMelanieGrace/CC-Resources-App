@@ -1,5 +1,5 @@
 import React from 'react';
-import { PenTool, Map, Calculator, GitFork, FileEdit, SpellCheck, Palette, BookType, ArrowRight } from 'lucide-react';
+import { PenTool, Map, Calculator, GitFork, FileEdit, SpellCheck, Palette, BookType, HeartPulse, ArrowRight } from 'lucide-react';
 import type { ActiveTool } from '../App';
 
 interface HubProps {
@@ -47,6 +47,9 @@ export const FoundationsHub: React.FC<HubProps> = ({ onSelectTool }) => (
       <Card icon={<Calculator className="w-5 h-5" />} title="Math Practice Builder"
         desc="Addition, subtraction, multiplication tables, long division with the classic bracket, rounding, and skip counting. Traditional algorithms only, with answer keys."
         cta="Build Math Sheets" onClick={() => onSelectTool('math')} />
+      <Card icon={<HeartPulse className="w-5 h-5" />} title="Body Systems"
+        desc="Full-body anatomy pages: skeletal, muscular, nervous, lymphatic, digestive, and urinary systems, each with a labeled public-domain diagram and kid-level notes on what every part does."
+        cta="Open Body Systems" onClick={() => onSelectTool('anatomy')} />
       <Card icon={<Palette className="w-5 h-5" />} title="Fine Arts"
         desc="Week-by-week art companion: drawing practice sheets, Great Artists studies with public-domain portraits and facts, and composer listening pages."
         cta="Open Fine Arts" onClick={() => onSelectTool('finearts')} />
